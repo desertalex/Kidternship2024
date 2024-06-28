@@ -114,7 +114,7 @@ Rerun the app and see the number appear. Does it count when we press on the cook
 
 In our image where I said we could add logic, lets change the count there. Since the parameter where we put counter in is called `name` put `name = name + 1` or shortened version is `name += 1`. This takes the value name and adds one to itself. We get an error though `val cannot be reassigned`.
 
-## Make Counter Mutable
+## Make Counter Mutable (changable)
 Looks like setting counter to an int was not the right idea, lets try again and set it as something that can be reassigned. Change the line where we set val counter to `val counter = mutableStateOf(0)`. So close, we get another error. This is saying we need to use something called `remember`. Mutable state of is able to change its value but it will not show on the screen. Instead we need the following code: `val counter = remember {mutableStateOf(0)}`. Dont forget to import `remember`.
 
 ## Change expected type in Greeting function
