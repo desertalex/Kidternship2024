@@ -95,26 +95,40 @@ Download one of the images below. Right click one of the below images and select
 ![Cookie](https://i.pinimg.com/originals/9f/3a/a5/9f3aa5fc60634251bf4cfa3085285d6b.png)
 
 ## Add image to Android Studio project
-On the far left sidebar, there is an icon with a small circle, square, and triangle. Click it. This is the resource manager. We will add our image here by clicking the plus near the top of the panel. Click on ```Import Drawables```. Find it in the downloads folder or whatever other folder you downloaded it to. And click ```OK```. Then click ```Next```. Change the name of the image for convenience and click next. Finally click import. Now drag and drop the image you imported into the ```Image()``` part of the code. It should make a line of code that says ```R.drawable.....```. This is a reference to your image. The image is still red though because it wants a ```painterResource``` instead of a reference to an image. do this by adding in the `Image()` `painterResource(id=)` In the spot where it says id=, put the path to the image (the one that says R.id.). It is still red, that is because we need to add `contentDescription = ""`. The final line should look something like `Image(painterResource(id = R.drawable.cookie), contentDescription = "")`. Now press play and see what your app looks like. You should see the cookie on your screen. Will anything happen when you press it?
+On the far left sidebar, there is an icon with a small circle, square, and triangle. Click it. This is the resource manager. We will add our image here by clicking the plus near the top of the panel. Click on ```Import Drawables```. Find it in the downloads folder or whatever other folder you downloaded it to. And click ```OK```. Then click ```Next```. Change the name of the image for convenience and click next. Finally click import.
 
+## Drag Image into code
+Now drag and drop the image you imported into the ```Image()``` part of the code. It should make a line of code that says ```R.drawable.....```. This is a reference to your image.
+
+## Wrap Image path in Painter Resource
+The image is still red though because it wants a ```painterResource``` instead of a reference to an image. do this by adding in the `Image()` `painterResource(id=)` In the spot where it says id=, put the path to the image (the one that says R.id.). It is still red, that is because we need to add `contentDescription = ""`. The final line should look something like `Image(painterResource(id = R.drawable.cookie), contentDescription = "")`. Now press play and see what your app looks like. You should see the cookie on your screen. Will anything happen when you press it?
+
+## Make Cookie Clickable
 Now we want to make the cookie clickable and add a counter for every time you click it. Lets start by making the cookie clickable. In the Image we created add a modifier `modifier = Modifier.clickable { }` Inside the curly braces we can put the logic to add the numbers. Run the app again and press the image, notice a difference?
 
-Lets reuse the `Text()` above the image to count the cookies since it is similar. We need to start by creating a variable that can count. In the `MainActivity` class right above the `Greeting` put `val counter = 0`. We are creating a value called counter and setting the value to 0. How do we get the counter to show up in the screen? Lets pass it as a parameter in our greeting function. Change the `name = 'Android'` to `name = counter`. Unfortunately we get a Type mismatch. It wants a `String` but we are giving it an `Int`. In east words, string means word or letter and int means number. We are giving it a number when it is expecting a word. We can change the `@Composable fun greeting` to take an Int instead of a String. In the Composable function find the parameter input where it says `String` and change it to say `Int`.
+
+## Add counter
+We need to start by creating a variable that can count. In the `MainActivity` class right above the `Greeting` put `val counter = 0`. We are creating a value called counter and setting the value to 0. How do we get the counter to show up in the screen? Lets pass it as a parameter in our greeting function. Change the `name = 'Android'` to `name = counter`. Unfortunately we get a Type mismatch. It wants a `String` but we are giving it an `Int`. In east words, string means word or letter and int means number. We are giving it a number when it is expecting a word. We can change the `@Composable fun greeting` to take an Int instead of a String. In the Composable function find the parameter input where it says `String` and change it to say `Int`.
 
 Rerun the app and see the number appear. Does it count when we press on the cookie? Nope, still work to do.
 
 In our image where I said we could add logic, lets change the count there. Since the parameter where we put counter in is called `name` put `name = name + 1` or shortened version is `name += 1`. This takes the value name and adds one to itself. We get an error though `val cannot be reassigned`.
 
+## Make Counter Mutable
 Looks like setting counter to an int was not the right idea, lets try again and set it as something that can be reassigned. Change the line where we set val counter to `val counter = mutableStateOf(0)`. So close, we get another error. This is saying we need to use something called `remember`. Mutable state of is able to change its value but it will not show on the screen. Instead we need the following code: `val counter = remember {mutableStateOf(0)}`. Dont forget to import `remember`.
 
+## Change expected type in Greeting function
 Below we see another error. Counter is red. There is another type mismatch where it requires an `Int` but Finds a `MutableState<Int>`. Just like we did before lets change the expected type in Greeting from `Int` to `MutableState<Int>`. Essentually we are wrapping our Int in a box of MutableState so that it can be changed.
 
 Our logic to add is now broken with an error message too long for me to want to read. That is because we are trying to add 1 to the MutableObject instead of the Int inside of it. Change the logic to say `name.value += 1` to do that.
 
+
+## View Value inside of MutableState Object
 Reload the app and see what it says..... oh no it says `Hello MutableState(value=0)@347248324789` or something like that. That is because we are displaying the MutableState object instead of the number inside of it. In our `Text` change it to say `${name.value}`
 
 Click the app to run it. Finally it works!!!
 
+## Final Code
 The final code should look similar to this
 ```
 package com.example.kidternshipapp
